@@ -36,7 +36,7 @@ debug/*
 release/*
 
 #qt related
-*.user
+*pro..user
 
 # temp makefile
 *.Debug
