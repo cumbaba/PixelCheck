@@ -18,24 +18,8 @@ Window {
 
         onPressed: {
             if (ScreenshotTaker.IsWaitingForInput) {
-                indicator.visible = true
-                indicator.x = mouse.x
-                indicator.y = mouse.y
                 point1 = Qt.point(mouse.x, mouse.y)
             }
-        }
-
-        Rectangle {
-            id: indicator
-
-            border.color: "red"
-            border.width: 1
-            color: "transparent"
-        }
-
-        onPoint2Changed: {
-            indicator.width = point2.x - point1.x
-            indicator.height = point2.y - point1.y
         }
 
         onMouseXChanged: {
@@ -51,24 +35,25 @@ Window {
         }
 
         onReleased: {
-
             buttonMenu.visible = true
 
             if (ScreenshotTaker.IsWaitingForInput) {
                 point2 = Qt.point(mouse.x, mouse.y)
-
-
                 ScreenshotTaker.focusAreaReceived(point1, point2)
-                indicator.visible = false
             }
+        }
+
+        onPoint1Changed: {
+            ssScreen.point1 = capturer.point1
+        }
+        onPoint2Changed: {
+            ssScreen.point2 = capturer.point2
         }
     }
 
-    Rectangle {
-        id: background
+    ScreenshotScreen {
+        id: ssScreen
         anchors.fill: parent
-        color: "gray"
-        opacity: 0.1
     }
 
     Rectangle {
@@ -102,6 +87,7 @@ Window {
                     onClicked: {
                         buttonMenu.visible = false
 
+                        ssScreen.reset()
                         ScreenshotTaker.takeBase()
                     }
 
@@ -114,6 +100,7 @@ Window {
                     onClicked: {
                         buttonMenu.visible = false
 
+                        ssScreen.reset()
                         ScreenshotTaker.takeSample()
                     }
                     text: "Sample image"

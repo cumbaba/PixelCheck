@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>qml/main.qml</file>
         <file>qml/MainMenuButton.qml</file>
+        <file>qml/ScreenshotScreen.qml</file>
     </qresource>
 </RCC>

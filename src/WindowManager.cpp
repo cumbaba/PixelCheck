@@ -33,9 +33,6 @@ void WindowManager::doMinimizeWindow() {
     QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
 }
 
-QImage WindowManager::doGrab() {
-
-//    QApplication::clipboard()->setImage();
-    window->grabWindow().save("asdsadas.jpeg");
-    return window->grabWindow();
+QPixmap WindowManager::doGrab(const QRect& rect) {
+    return window->screen()->grabWindow(0, rect.x(), rect.y(), rect.width(), rect.height());
 }

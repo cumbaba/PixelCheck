@@ -16,8 +16,8 @@ class WindowManager {
         static void minimizeWindow() {
             instance().doMinimizeWindow();
         }
-        static void grab() {
-            instance().doGrab();
+        static QPixmap grab(const QRect& rect) {
+            return instance().doGrab(rect);
         }
 
 
@@ -27,7 +27,7 @@ class WindowManager {
         void doSetWindow(QQuickWindow* aWindow);
         void doMaximizeWindow();
         void doMinimizeWindow();
-        QImage doGrab();
+        QPixmap doGrab(const QRect &rect);
 
         QSize lastSize;
         QPoint lastPosition;

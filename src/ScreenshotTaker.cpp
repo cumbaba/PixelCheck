@@ -34,9 +34,19 @@ void ScreenshotTaker::focusAreaReceived(const QPoint& point1, const QPoint& poin
 
     std::cout << "[p1] x: " << point1.x() << " y: " << point1.y() << " [p2] x: " << point2.x() << " y: " << point2.y() <<
               std::endl;
-    WindowManager::grab();
-}
+    auto image = WindowManager::grab(QRect{
+        point1, point2
+    });
 
+    if (isExpectingBase) {
+        baseImage = image;
+        baseImage.save("base.jpg");
+    }
+    else {
+        sampleImage = image;
+        sampleImage.save("sample.jpg");
+    }
+}
 
 void ScreenshotTaker::take() {
     setIsWaitingForInput(true);

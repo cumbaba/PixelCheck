@@ -24,6 +24,8 @@ class ScreenshotTaker : public QObject {
         void focusAreaReceived(const QPoint &point1, const QPoint &point2);
 
     private:
+        QPixmap baseImage;
+        QPixmap sampleImage;
         void take();
 
         bool isExpectingBase;
