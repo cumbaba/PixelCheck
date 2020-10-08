@@ -39,6 +39,7 @@ Window {
 
             if (ScreenshotCommander.IsWaitingForInput) {
                 point2 = Qt.point(mouse.x, mouse.y)
+                ScreenshotCommander.focusAreaReceived()
             }
         }
 

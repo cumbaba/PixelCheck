@@ -26,7 +26,7 @@ bool MouseWatcher::eventFilter(QObject* const object, QEvent* const event) {
         }
         else if (event->type() == QEvent::MouseButtonRelease) {
             isOn = false;
-            start = getMousePosition();
+            end = getMousePosition();
             QCoreApplication::instance()->removeEventFilter(this);
             emit signalClickFinished();
         }

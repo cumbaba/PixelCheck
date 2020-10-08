@@ -1,13 +1,16 @@
 #include "ScreenshotTaker.h"
 
-#include <QObject>
-#include <QDesktopWidget>
 #include <QApplication>
 #include <QGuiApplication>
+#include <QObject>
+#include <QDesktopWidget>
+#include <QScreen>
 
 #include <iostream>
 
-ScreenshotTaker::ScreenshotTaker() {}
+ScreenshotTaker::ScreenshotTaker(QObject* const parent) : QObject(parent) {}
+
+ScreenshotTaker::~ScreenshotTaker() {}
 
 ScreenshotTaker& ScreenshotTaker::instance() {
     static ScreenshotTaker _instance;
@@ -16,6 +19,10 @@ ScreenshotTaker& ScreenshotTaker::instance() {
 
 void ScreenshotTaker::SetWindow(QQuickWindow* aWindow) {
     instance().doSetWindow(aWindow);
+}
+
+QPixmap ScreenshotTaker::GetScreenshot() {
+    return instance().lastTakenShot;
 }
 
 
@@ -29,29 +36,37 @@ void ScreenshotTaker::doSetWindow(QQuickWindow* aWindow) {
 }
 
 void ScreenshotTaker::doTurnOn() {
-    if (!mouseWatcher.isWatching()) {
-        mouseWatcher.watchClick();
-        //wtf
-//        QObject::connect(this, &ScreenshotTaker::signalClickFinished,
-//                this, &ScreenshotTaker::onFinish);
+    lastSize = window->size();
+    lastPosition = window->position();
+    window->setMaximumSize(window->screen()->geometry().size());
 
-        QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::CrossCursor));
-    }
+    window->setWindowState(Qt::WindowState::WindowMaximized);
+    window->setFlags(Qt::WindowType::FramelessWindowHint);
+
+    mouseWatcher.watchClick();
+    QObject::connect(&mouseWatcher, &MouseWatcher::signalClickFinished,
+                     this, &ScreenshotTaker::onFinish);
+
+    QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::CrossCursor));
 }
 
 void ScreenshotTaker::onFinish() {
-    if (mouseWatcher.isWatching()) {
-        window->setWindowState(Qt::WindowState::WindowNoState);
-        window->setFlags(Qt::WindowType::Window);
+    QObject::disconnect(&mouseWatcher, &MouseWatcher::signalClickFinished,
+                        this, &ScreenshotTaker::onFinish);
 
-        QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
+    window->setWindowState(Qt::WindowState::WindowNoState);
+    window->setFlags(Qt::WindowType::Window);
+
+    window->setMaximumSize(lastSize);
+    window->setPosition(lastPosition);
+
+    QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
 
 
-        std::cout << "[p1] x: " << mouseWatcher.getClickedArea().x() << " y: " << mouseWatcher.getClickedArea().y()
-                  << " [p2] x: " << mouseWatcher.getClickedArea().x() + mouseWatcher.getClickedArea().width() << " y: "
-                  << mouseWatcher.getClickedArea().y() +  mouseWatcher.getClickedArea().height() <<
-                  std::endl;
+    std::cout << "[p1] x: " << mouseWatcher.getClickedArea().x() << " y: " << mouseWatcher.getClickedArea().y()
+              << " [p2] w: " <<  mouseWatcher.getClickedArea().width() << " w: "
+              <<   mouseWatcher.getClickedArea().height() <<
+              std::endl;
 
-        lastTakenShot = QApplication::desktop()->screen(mouseWatcher.getScreenNumber())->grab(mouseWatcher.getClickedArea());
-    }
+    lastTakenShot = QApplication::desktop()->screen(mouseWatcher.getScreenNumber())->grab(mouseWatcher.getClickedArea());
 }

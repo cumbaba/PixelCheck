@@ -30,6 +30,15 @@ void ScreenshotCommander::takeSample() {
 
 void ScreenshotCommander::focusAreaReceived() {
     setIsWaitingForInput(false);
+
+    if (isExpectingBase) {
+        baseImage = ScreenshotTaker::GetScreenshot();
+        baseImage.save("base.jpg");
+    }
+    else {
+        sampleImage = ScreenshotTaker::GetScreenshot();
+        sampleImage.save("sample.jpg");
+    }
 }
 
 void ScreenshotCommander::take() {

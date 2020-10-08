@@ -5,26 +5,32 @@
 #include <QPixmap>
 #include <QCursor>
 #include <QQuickWindow>
+#include <QtCore/QObject>
+
 
 #include "MouseWatcher.h"
 
-class ScreenshotTaker {
+class ScreenshotTaker : public QObject {
+        Q_OBJECT
     public:
         static ScreenshotTaker& instance();
         static void TurnOn();
         static void SetWindow(QQuickWindow* aWindow);
+        static QPixmap GetScreenshot();
 
     private:
-        ScreenshotTaker();
-        ~ScreenshotTaker() {}
+        ScreenshotTaker(QObject* const parent = nullptr);
+        virtual ~ScreenshotTaker();
+
         void doSetWindow(QQuickWindow* aWindow);
         void doTurnOn();
 
         void onStart();
         void onFinish();
-        QPoint getMousePosition();
-
         QPixmap lastTakenShot;
+
+        QSize lastSize;
+        QPoint lastPosition;
 
         QQuickWindow* window;
 
