@@ -1,34 +1,34 @@
 #ifndef SCREENSHOTTAKER_H
 #define SCREENSHOTTAKER_H
 
-#include <QObject>
-
+#include <QPoint>
+#include <QPixmap>
+#include <QCursor>
 #include <QQuickWindow>
-#include "PropertyMacros.h"
 
-class ScreenshotTaker : public QObject {
-        Q_OBJECT
+#include "MouseWatcher.h"
 
+class ScreenshotTaker {
     public:
-        explicit ScreenshotTaker(QObject* parent = nullptr);
-
-        CHANGING_PROPERTY(bool, IsWaitingForInput)
-
-    signals:
-        void signalIsWaitingForInputChanged();
-
-    public slots:
-
-        void takeBase();
-        void takeSample();
-        void focusAreaReceived(const QPoint &point1, const QPoint &point2);
+        static ScreenshotTaker& instance();
+        static void TurnOn();
+        static void SetWindow(QQuickWindow* aWindow);
 
     private:
-        QPixmap baseImage;
-        QPixmap sampleImage;
-        void take();
+        ScreenshotTaker();
+        ~ScreenshotTaker() {}
+        void doSetWindow(QQuickWindow* aWindow);
+        void doTurnOn();
 
-        bool isExpectingBase;
+        void onStart();
+        void onFinish();
+        QPoint getMousePosition();
+
+        QPixmap lastTakenShot;
+
+        QQuickWindow* window;
+
+        MouseWatcher mouseWatcher;
 };
 
 #endif // SCREENSHOTTAKER_H

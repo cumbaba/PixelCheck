@@ -1,16 +1,18 @@
 TEMPLATE = app
 
-QT += qml quick
+QT += qml quick widgets
 CONFIG += c++11
 
 SOURCES += src/main.cpp \
-    src/ScreenshotTaker.cpp \
-    src/WindowManager.cpp
+    src/MouseWatcher.cpp \
+    src/ScreenshotCommander.cpp \
+    src/ScreenshotTaker.cpp
 
 HEADERS += \
-    src/ScreenshotTaker.h \
+    src/MouseWatcher.h \
     src/PropertyMacros.h \
-    src/WindowManager.h
+    src/ScreenshotCommander.h \
+    src/ScreenshotTaker.h
 
 RESOURCES += src/qml.qrc \
             resources/
