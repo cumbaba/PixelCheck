@@ -68,5 +68,6 @@ void ScreenshotTaker::onFinish() {
               <<   mouseWatcher.getClickedArea().height() <<
               std::endl;
 
+    // TODO this doesnot work ´fix it
     lastTakenShot = QApplication::desktop()->screen(mouseWatcher.getScreenNumber())->grab(mouseWatcher.getClickedArea());
 }
