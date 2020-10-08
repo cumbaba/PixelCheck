@@ -35,12 +35,12 @@ Window {
         }
 
         onReleased: {
-            buttonMenu.visible = true
-
             if (ScreenshotCommander.IsWaitingForInput) {
                 point2 = Qt.point(mouse.x, mouse.y)
                 ScreenshotCommander.focusAreaReceived()
             }
+
+            buttonMenu.visible = true
         }
 
         onPoint1Changed: {
