@@ -3,32 +3,56 @@
 
 #include <QObject>
 #include <QMouseEvent>
+#include <QPixmap>
+#include <QTimer>
 
 class MouseWatcher : public QObject {
         Q_OBJECT
 
     public:
-        MouseWatcher(QObject* const parent = nullptr);
-        ~MouseWatcher();
+        static MouseWatcher& instance();
 
-        int getScreenNumber()const;
-        bool isWatching()const;
+        static int GetScreenNumber();
 
-        void watchClick();
-        QPixmap getClickedArea();
+        static void StartCursorImageWatch();
+        static void StopCursorImageWatch();
+        static void CaptureMouseClick();
+
+        static QPixmap GetClickedArea();
+        static QPoint GetMousePosition();
+        static QPixmap GetLastTakenCursorImage();
+
+        static void SetCursorImageHeight(const unsigned int aCursorImageHeight);
+        static void SetCursorImageWidth(const unsigned int aCursorImageWidth);
 
     signals:
+        void signalCursorImageUpdate(const QPixmap& image);
         void signalClickFinished();
 
     protected:
         virtual bool eventFilter(QObject* const object, QEvent* const event);
 
     private:
-        QPoint getMousePosition();
-        QPoint start;
-        QPoint end;
+        MouseWatcher(QObject* const parent = nullptr);
+        virtual ~MouseWatcher();
+
+        void doWatchClick();
+        QPixmap doGetClickedArea();
+
+        void updateCursorImage();
+
+        QPixmap lastTakenCursorImage;
+        QPoint clickStart;
+        QPoint clickEnd;
+        QPoint lastCursorPosition;
+
+        QTimer cursorImageMonitor;
+
+        unsigned int cursorImageWidth;
+        unsigned int cursorImageHeight;
         int screenNumber;
-        bool isOn;
+
+        bool isClickCaptureOn;
 };
 
 #endif // MOUSEWATCHER_H

@@ -8,6 +8,7 @@
 #include "ScreenshotCommander.h"
 #include "ScreenshotTaker.h"
 
+#include "Magnifier.h"
 void customMessageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
     Q_UNUSED(context)
 
@@ -28,6 +29,7 @@ int main(int argc, char* argv[]) {
     auto ssTaker = new ScreenshotCommander();
 
     engine.rootContext()->setContextProperty("ScreenshotCommander", ssTaker);
+    engine.rootContext()->setContextProperty("Magnifier", &Magnifier::instance());
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 

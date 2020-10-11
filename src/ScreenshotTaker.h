@@ -6,8 +6,6 @@
 #include <QPixmap>
 #include <QQuickWindow>
 
-#include "MouseWatcher.h"
-
 class ScreenshotTaker : public QObject {
         Q_OBJECT
     public:
@@ -31,8 +29,6 @@ class ScreenshotTaker : public QObject {
         QPoint lastPosition;
 
         QQuickWindow* window;
-
-        MouseWatcher mouseWatcher;
 };
 
 #endif // SCREENSHOTTAKER_H

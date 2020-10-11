@@ -118,6 +118,27 @@ Window {
 
                 text: "Compare"
             }
+
+            CheckBox {
+                width: 50
+                height: 50
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                onCheckedChanged: {
+                    if (checked) {
+                        Magnifier.turnOn()
+                    } else {
+                        Magnifier.turnOff()
+                    }
+                }
+                text: "Magnifier"
+
+                Component.onCompleted: {
+                    checked = true
+                }
+            }
         }
     }
 }

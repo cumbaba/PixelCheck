@@ -5,13 +5,15 @@
 #include <QDesktopWidget>
 #include <QScreen>
 
+#include "MouseWatcher.h"
+
 ScreenshotTaker::ScreenshotTaker(QObject* const parent) : QObject(parent) {
-    QObject::connect(&mouseWatcher, &MouseWatcher::signalClickFinished,
+    QObject::connect(&MouseWatcher::instance(), &MouseWatcher::signalClickFinished,
                      this, &ScreenshotTaker::onFinish);
 }
 
 ScreenshotTaker::~ScreenshotTaker() {
-    mouseWatcher.disconnect();
+    this->disconnect();
 }
 
 ScreenshotTaker& ScreenshotTaker::instance() {
@@ -44,13 +46,13 @@ void ScreenshotTaker::doTurnOn() {
     window->setWindowState(Qt::WindowState::WindowMaximized);
     window->setFlags(Qt::WindowType::FramelessWindowHint);
 
-    mouseWatcher.watchClick();
+    MouseWatcher::CaptureMouseClick();
 
     QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::CrossCursor));
 }
 
 void ScreenshotTaker::onFinish() {
-    lastTakenShot = mouseWatcher.getClickedArea();
+    lastTakenShot = MouseWatcher::GetClickedArea();
 
     QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
 
