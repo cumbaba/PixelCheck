@@ -160,6 +160,7 @@ Makefile: PixelCheck.pro ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/win32-g
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/resources.prf \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/moc.prf \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/win32/opengl.prf \
+		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/uic.prf \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/file_copies.prf \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/win32/windows.prf \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/testcase_targets.prf \
@@ -169,6 +170,7 @@ Makefile: PixelCheck.pro ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/win32-g
 		PixelCheck.pro \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/qtmaind.prl \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Quick.prl \
+		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Widgets.prl \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Gui.prl \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Qml.prl \
 		../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Network.prl \
@@ -275,6 +277,7 @@ deployment.pri:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/resources.prf:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/moc.prf:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/win32/opengl.prf:
+../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/uic.prf:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/file_copies.prf:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/win32/windows.prf:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/mkspecs/features/testcase_targets.prf:
@@ -284,6 +287,7 @@ deployment.pri:
 PixelCheck.pro:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/qtmaind.prl:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Quick.prl:
+../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Widgets.prl:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Gui.prl:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Qml.prl:
 ../../../../Qt/Qt5.6.3/5.6.3/mingw49_32/lib/Qt5Network.prl:

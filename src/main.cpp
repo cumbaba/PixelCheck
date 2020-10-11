@@ -1,12 +1,12 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QIcon>
 #include <QQmlEngine>
 
+#include "ScreenshotCommander.h"
 #include "ScreenshotTaker.h"
-#include "WindowManager.h"
 
 void customMessageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
     Q_UNUSED(context)
@@ -20,14 +20,14 @@ void customMessageOutput(QtMsgType type, const QMessageLogContext& context, cons
 int main(int argc, char* argv[]) {
     qInstallMessageHandler(customMessageOutput);
 
-    QGuiApplication app(argc, argv);
+    QApplication  app(argc, argv);
     app.setWindowIcon(QIcon("resources/check.svg"));
 
     QQmlApplicationEngine engine;
 
-    auto ssTaker = new ScreenshotTaker();
+    auto ssTaker = new ScreenshotCommander();
 
-    engine.rootContext()->setContextProperty("ScreenshotTaker", ssTaker);
+    engine.rootContext()->setContextProperty("ScreenshotCommander", ssTaker);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    WindowManager::setWindow(window);
+    ScreenshotTaker::SetWindow(window);
 
     return app.exec();
 }

@@ -1,54 +1,62 @@
 #include "ScreenshotTaker.h"
 
+#include <QApplication>
 #include <QGuiApplication>
-#include <QCursor>
+#include <QDesktopWidget>
 #include <QScreen>
-#include <QThread>
 
-#include "WindowManager.h"
-
-#include <stdio.h>
-#include <iostream>
-
-ScreenshotTaker::ScreenshotTaker(QObject* parent):
-    QObject(parent),
-    IsWaitingForInput(false),
-    isExpectingBase(true) {
+ScreenshotTaker::ScreenshotTaker(QObject* const parent) : QObject(parent) {
+    QObject::connect(&mouseWatcher, &MouseWatcher::signalClickFinished,
+                     this, &ScreenshotTaker::onFinish);
 }
 
-void ScreenshotTaker::takeBase() {
-    std::cout << "aha" << std::endl;
-    isExpectingBase = true;
-    take();
+ScreenshotTaker::~ScreenshotTaker() {
+    mouseWatcher.disconnect();
 }
 
-void ScreenshotTaker::takeSample() {
-    std::cout << "baha" << std::endl;
-    isExpectingBase = false;
-    take();
+ScreenshotTaker& ScreenshotTaker::instance() {
+    static ScreenshotTaker _instance;
+    return _instance;
 }
 
-void ScreenshotTaker::focusAreaReceived(const QPoint& point1, const QPoint& point2) {
-    setIsWaitingForInput(false);
-    WindowManager::minimizeWindow();
-
-    std::cout << "[p1] x: " << point1.x() << " y: " << point1.y() << " [p2] x: " << point2.x() << " y: " << point2.y() <<
-              std::endl;
-    auto image = WindowManager::grab(QRect{
-        point1, point2
-    });
-
-    if (isExpectingBase) {
-        baseImage = image;
-        baseImage.save("base.jpg");
-    }
-    else {
-        sampleImage = image;
-        sampleImage.save("sample.jpg");
-    }
+void ScreenshotTaker::SetWindow(QQuickWindow* aWindow) {
+    instance().doSetWindow(aWindow);
 }
 
-void ScreenshotTaker::take() {
-    setIsWaitingForInput(true);
-    WindowManager::maximizeWindow();
+QPixmap ScreenshotTaker::GetScreenshot() {
+    return instance().lastTakenShot;
+}
+
+void ScreenshotTaker::TurnOn() {
+    instance().doTurnOn();
+}
+
+void ScreenshotTaker::doSetWindow(QQuickWindow* aWindow) {
+    window = aWindow;
+    window->setFlags(Qt::WindowStaysOnTopHint | window->flags());
+}
+
+void ScreenshotTaker::doTurnOn() {
+    lastSize = window->size();
+    lastPosition = window->position();
+
+    window->setMaximumSize(window->screen()->geometry().size());
+    window->setWindowState(Qt::WindowState::WindowMaximized);
+    window->setFlags(Qt::WindowType::FramelessWindowHint);
+
+    mouseWatcher.watchClick();
+
+    QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::CrossCursor));
+}
+
+void ScreenshotTaker::onFinish() {
+    window->setWindowState(Qt::WindowState::WindowNoState);
+    window->setFlags(Qt::WindowType::Window);
+
+    window->setMaximumSize(lastSize);
+    window->setPosition(lastPosition);
+
+    QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
+
+    lastTakenShot = mouseWatcher.getClickedArea();
 }

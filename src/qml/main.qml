@@ -17,30 +17,30 @@ Window {
         property point point2
 
         onPressed: {
-            if (ScreenshotTaker.IsWaitingForInput) {
+            if (ScreenshotCommander.IsWaitingForInput) {
                 point1 = Qt.point(mouse.x, mouse.y)
             }
         }
 
         onMouseXChanged: {
-            if (ScreenshotTaker.IsWaitingForInput && capturer.pressed) {
+            if (ScreenshotCommander.IsWaitingForInput && capturer.pressed) {
                 point2 = Qt.point(mouse.x, mouse.y)
             }
         }
 
         onMouseYChanged: {
-            if (ScreenshotTaker.IsWaitingForInput && capturer.pressed) {
+            if (ScreenshotCommander.IsWaitingForInput && capturer.pressed) {
                 point2 = Qt.point(mouse.x, mouse.y)
             }
         }
 
         onReleased: {
-            buttonMenu.visible = true
-
-            if (ScreenshotTaker.IsWaitingForInput) {
+            if (ScreenshotCommander.IsWaitingForInput) {
                 point2 = Qt.point(mouse.x, mouse.y)
-                ScreenshotTaker.focusAreaReceived(point1, point2)
+                ScreenshotCommander.focusAreaReceived()
             }
+
+            buttonMenu.visible = true
         }
 
         onPoint1Changed: {
@@ -88,7 +88,7 @@ Window {
                         buttonMenu.visible = false
 
                         ssScreen.reset()
-                        ScreenshotTaker.takeBase()
+                        ScreenshotCommander.takeBase()
                     }
 
                     text: "Base image"
@@ -101,7 +101,7 @@ Window {
                         buttonMenu.visible = false
 
                         ssScreen.reset()
-                        ScreenshotTaker.takeSample()
+                        ScreenshotCommander.takeSample()
                     }
                     text: "Sample image"
                 }
