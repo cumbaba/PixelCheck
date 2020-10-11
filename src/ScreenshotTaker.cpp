@@ -50,13 +50,13 @@ void ScreenshotTaker::doTurnOn() {
 }
 
 void ScreenshotTaker::onFinish() {
+    lastTakenShot = mouseWatcher.getClickedArea();
+
+    QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
+
     window->setWindowState(Qt::WindowState::WindowNoState);
     window->setFlags(Qt::WindowType::Window);
 
     window->setMaximumSize(lastSize);
     window->setPosition(lastPosition);
-
-    QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
-
-    lastTakenShot = mouseWatcher.getClickedArea();
 }
