@@ -7,14 +7,16 @@ SOURCES += src/main.cpp \
     src/MouseWatcher.cpp \
     src/ScreenshotCommander.cpp \
     src/ScreenshotTaker.cpp \
-    src/Magnifier.cpp
+    src/Magnifier.cpp \
+    src/ImageComparison.cpp
 
 HEADERS += \
     src/MouseWatcher.h \
     src/PropertyMacros.h \
     src/ScreenshotCommander.h \
     src/ScreenshotTaker.h \
-    src/Magnifier.h
+    src/Magnifier.h \
+    src/ImageComparison.h
 
 RESOURCES += src/qml.qrc \
             resources/

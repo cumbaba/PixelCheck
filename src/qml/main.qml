@@ -1,12 +1,13 @@
 import QtQuick 2.5
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.0
+import QtQuick.Controls.Styles 1.4
 
 Window {
     id: mainWindow
     visible: true
     width: 300
-    height: 200
+    height: 240
 
     color: "transparent"
 
@@ -60,20 +61,22 @@ Window {
     Rectangle {
         id: buttonMenu
 
-        implicitWidth: 300
-        implicitHeight: 200
+        implicitWidth: mainWindow.width
+        implicitHeight: mainWindow.height
         anchors.centerIn: parent
         color: "gray"
 
         Column {
             id: column
+            width: 250
+            height: 180
             anchors {
                 horizontalCenter: parent.horizontalCenter
                 top: parent.top
                 topMargin: 20
             }
 
-            spacing: 30
+            spacing: 10
 
             Row {
                 id: imageRow
@@ -108,15 +111,83 @@ Window {
                 }
             }
 
+            Row {
+
+                spacing: 40
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                Label {
+                    text: "Width:"
+                    width: 40
+                    font.pixelSize: 15
+                }
+
+                TextField {
+                    id: width
+
+                    height: 20
+                    width: 100
+                    font.pixelSize: 15
+
+                    anchors.verticalCenter: heightLabel.verticalCenter
+                    style: TextFieldStyle {
+                        textColor: "black"
+                        background: Rectangle {
+                            color: "white"
+                        }
+                    }
+
+                    onTextChanged: {
+                        ImageComparison.ApplicationWidth = text;
+                        ImageComparison.updateIsComparable()
+                    }
+                }
+            }
+
+            Row {
+
+                spacing: 40
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                Label {
+                    id: heightLabel
+                    text: "Height:"
+                    width: 40
+                    font.pixelSize: 15
+                }
+
+                TextField {
+                    id: height
+
+                    height: 20
+                    width: 100
+                    font.pixelSize: 15
+
+                    anchors.verticalCenter: heightLabel.verticalCenter
+                    style: TextFieldStyle {
+                        textColor: "black"
+                        background: Rectangle {
+                            color: "white"
+                        }
+                    }
+
+                    onTextChanged: {
+                        ImageComparison.ApplicationHeight = text;
+                        ImageComparison.updateIsComparable()
+                    }
+                }
+            }
+
             MainMenuButton {
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                 }
 
-                onClicked: {
-
-                }
-
+                enabled: ImageComparison.IsComparable
                 text: "Compare"
             }
 
