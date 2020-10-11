@@ -189,6 +189,10 @@ Window {
 
                 enabled: ImageComparison.IsComparable
                 text: "Compare"
+
+                onClicked: {
+                    ImageComparison.compare()
+                }
             }
 
             CheckBox {

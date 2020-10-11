@@ -29,7 +29,7 @@ class ImageComparison : public QObject {
 
     public slots:
         void updateIsComparable();
-
+        void compare();
     private:
         ImageComparison(QObject* const parent = nullptr);
         virtual ~ImageComparison();

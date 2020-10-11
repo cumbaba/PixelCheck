@@ -35,3 +35,7 @@ void ImageComparison::updateIsComparable() {
                     && minHeight < baseImage.height() && minHeight < sampleImage.height()
                     && minWidth < baseImage.width() && minWidth < sampleImage.width());
 }
+
+void ImageComparison::compare() {
+    // TODO
+}
