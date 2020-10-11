@@ -2,7 +2,7 @@
 #define SCREENSHOTCOMMANDER_H
 
 #include <QObject>
-#include <QQuickWindow>
+#include <QPixmap>
 
 #include "PropertyMacros.h"
 
@@ -10,7 +10,7 @@ class ScreenshotCommander : public QObject {
         Q_OBJECT
 
     public:
-        explicit ScreenshotCommander(QObject* parent = nullptr);
+        explicit ScreenshotCommander(QObject* const parent = nullptr);
 
         CHANGING_PROPERTY(bool, IsWaitingForInput)
 
@@ -24,10 +24,10 @@ class ScreenshotCommander : public QObject {
         void focusAreaReceived();
 
     private:
-        QPixmap baseImage;
-        QPixmap sampleImage;
         void take();
 
+        QPixmap baseImage;
+        QPixmap sampleImage;
         bool isExpectingBase;
 };
 

@@ -8,14 +8,15 @@ class MouseWatcher : public QObject {
         Q_OBJECT
 
     public:
-        MouseWatcher() {}
-        ~MouseWatcher() {}
+        MouseWatcher(QObject* const parent = nullptr);
+        ~MouseWatcher();
+
+        int getScreenNumber()const;
+        bool isWatching()const;
 
         void watchClick();
-        int getScreenNumber();
+        QPixmap getClickedArea();
 
-        QRect getClickedArea();
-        bool isWatching()const;
     signals:
         void signalClickFinished();
 

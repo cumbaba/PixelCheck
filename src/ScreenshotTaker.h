@@ -1,12 +1,10 @@
 #ifndef SCREENSHOTTAKER_H
 #define SCREENSHOTTAKER_H
 
+#include <QObject>
 #include <QPoint>
 #include <QPixmap>
-#include <QCursor>
 #include <QQuickWindow>
-#include <QtCore/QObject>
-
 
 #include "MouseWatcher.h"
 
