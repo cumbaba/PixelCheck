@@ -8,7 +8,8 @@
 #include "MouseWatcher.h"
 
 Magnifier::Magnifier(QObject* const parent) : QObject(parent) {
-    window = new QMainWindow();
+    window = new QMainWindow(QApplication::desktop());
+
     window->setGeometry(100, 100, 200, 200);
     window->setWindowState(Qt::WindowState::WindowActive);
     window->setWindowFlags(window->windowFlags() | Qt::SubWindow | Qt::WindowStaysOnTopHint);
@@ -17,9 +18,18 @@ Magnifier::Magnifier(QObject* const parent) : QObject(parent) {
                      this, &Magnifier::onCursorImageReceived);
 }
 
-Magnifier::~Magnifier() {
+void Magnifier::close(QQuickCloseEvent* close) {
+    Q_UNUSED(close)
+
     QObject::disconnect(&MouseWatcher::instance(), &MouseWatcher::signalCursorImageUpdate,
                         this, &Magnifier::onCursorImageReceived);
+    MouseWatcher::StopCursorImageWatch();
+    window->close();
+    delete window;
+    QCoreApplication::quit();
+}
+
+Magnifier::~Magnifier() {
 }
 
 Magnifier& Magnifier::instance() {
@@ -58,6 +68,6 @@ void Magnifier::onCursorImageReceived(const QPixmap& image) {
 void Magnifier::coverCenterPixel(QPixmap* image) {
     QPainter* paint = new QPainter(image);
     paint->setPen(QColor(255, 80, 180, 255));
-    paint->drawRect(98, 98, 6, 6);
+    paint->drawRect(99, 99, 6, 6);
     delete paint;
 }

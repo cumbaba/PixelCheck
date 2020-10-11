@@ -4,12 +4,14 @@
 #include <QObject>
 
 #include <QMainWindow>
+#include <QQuickWindow>
 class Magnifier : public QObject {
         Q_OBJECT
     public:
         static Magnifier& instance();
 
     public slots:
+        void close(QQuickCloseEvent *close);
         void turnOn();
         void turnOff();
 

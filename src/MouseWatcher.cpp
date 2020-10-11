@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScreen>
 
 #include <iostream>
 
@@ -15,6 +16,7 @@ MouseWatcher::MouseWatcher(QObject* const parent): QObject(parent),
 }
 
 MouseWatcher::~MouseWatcher() {
+    cursorImageMonitor.stop();
     cursorImageMonitor.disconnect();
 }
 
@@ -41,6 +43,7 @@ void MouseWatcher::StopCursorImageWatch() {
         instance().cursorImageMonitor.stop();
     }
 }
+
 bool MouseWatcher::eventFilter(QObject* const object, QEvent* const event) {
     if (isClickCaptureOn) {
         if (event->type() == QEvent::MouseButtonPress) {
@@ -63,11 +66,12 @@ bool MouseWatcher::eventFilter(QObject* const object, QEvent* const event) {
 void MouseWatcher::updateCursorImage() {
     auto pos = GetMousePosition();
 
-    emit signalCursorImageUpdate(QPixmap::grabWindow(GetScreenNumber(),
-                           pos.x() - cursorImageWidth / 2,
-                           pos.y() - cursorImageHeight / 2,
-                           cursorImageWidth,
-                           cursorImageHeight));
+    emit signalCursorImageUpdate(QApplication::primaryScreen()->grabWindow(
+                                     QApplication::desktop()->winId(),
+                                     pos.x() - cursorImageWidth / 2,
+                                     pos.y() - cursorImageHeight / 2,
+                                     cursorImageWidth,
+                                     cursorImageHeight));
 }
 
 QPixmap MouseWatcher::doGetClickedArea() {
@@ -76,11 +80,12 @@ QPixmap MouseWatcher::doGetClickedArea() {
     std::cout << "[p1] x: " << area.x() << " y: " << area.y() <<
               " [p2] w: " << area.width() << " w: " << area.height() << std::endl;
 
-    return QPixmap::grabWindow(GetScreenNumber(),
-                               area.x(),
-                               area.y(),
-                               area.width(),
-                               area.height());
+    return QApplication::primaryScreen()->grabWindow(
+               QApplication::desktop()->winId(),
+               area.x(),
+               area.y(),
+               area.width(),
+               area.height());
 
 }
 

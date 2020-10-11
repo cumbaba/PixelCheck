@@ -35,7 +35,7 @@ void ScreenshotTaker::TurnOn() {
 
 void ScreenshotTaker::doSetWindow(QQuickWindow* aWindow) {
     window = aWindow;
-    window->setFlags(Qt::WindowStaysOnTopHint | window->flags());
+    window->setFlags(window->flags() | Qt::WindowStaysOnTopHint);
 }
 
 void ScreenshotTaker::doTurnOn() {
@@ -44,7 +44,7 @@ void ScreenshotTaker::doTurnOn() {
 
     window->setMaximumSize(window->screen()->geometry().size());
     window->setWindowState(Qt::WindowState::WindowMaximized);
-    window->setFlags(Qt::WindowType::FramelessWindowHint);
+    window->setFlags(window->flags() | Qt::WindowType::FramelessWindowHint);
 
     MouseWatcher::CaptureMouseClick();
 
@@ -57,7 +57,7 @@ void ScreenshotTaker::onFinish() {
     QGuiApplication::setOverrideCursor(QCursor(Qt::CursorShape::ArrowCursor));
 
     window->setWindowState(Qt::WindowState::WindowNoState);
-    window->setFlags(Qt::WindowType::Window);
+    window->setFlags(window->flags() ^ Qt::WindowType::FramelessWindowHint);
 
     window->setMaximumSize(lastSize);
     window->setPosition(lastPosition);

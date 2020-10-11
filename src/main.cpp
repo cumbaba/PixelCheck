@@ -7,8 +7,8 @@
 
 #include "ScreenshotCommander.h"
 #include "ScreenshotTaker.h"
-
 #include "Magnifier.h"
+
 void customMessageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
     Q_UNUSED(context)
 
@@ -22,6 +22,8 @@ int main(int argc, char* argv[]) {
     qInstallMessageHandler(customMessageOutput);
 
     QApplication  app(argc, argv);
+
+    app.setQuitOnLastWindowClosed(false);
     app.setWindowIcon(QIcon("resources/check.svg"));
 
     QQmlApplicationEngine engine;
@@ -39,6 +41,8 @@ int main(int argc, char* argv[]) {
         qFatal("Error: Your root item has to be a window.");
         return -1;
     }
+
+    QObject::connect(window, SIGNAL(closing(QQuickCloseEvent*)),  &Magnifier::instance(), SLOT(close(QQuickCloseEvent*)));
 
     ScreenshotTaker::SetWindow(window);
 

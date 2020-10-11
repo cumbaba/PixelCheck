@@ -9,6 +9,7 @@ Window {
     height: 200
 
     color: "transparent"
+
     MouseArea {
         id: capturer
         anchors.fill: parent
