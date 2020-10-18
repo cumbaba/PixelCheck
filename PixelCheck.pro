@@ -27,3 +27,11 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
+INCLUDEPATH += $$PWD/lib/opencv/include
+
+LIBS += $$PWD/lib/opencv/bin/libopencv_core440.dll
+LIBS += $$PWD/lib/opencv/bin/libopencv_highgui440.dll
+LIBS += $$PWD/lib/opencv/bin/libopencv_imgcodecs440.dll
+LIBS += $$PWD/lib/opencv/bin/libopencv_imgproc440.dll
+LIBS += $$PWD/lib/opencv/bin/libopencv_features2d440.dll
+LIBS += $$PWD/lib/opencv/bin/libopencv_calib3d440.dll

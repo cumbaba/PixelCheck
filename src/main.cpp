@@ -10,6 +10,9 @@
 #include "Magnifier.h"
 #include "ImageComparison.h"
 
+#include <opencv2/core/core.hpp>
+#include <opencv2//highgui/highgui.hpp>
+
 void customMessageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
     Q_UNUSED(context)
 
@@ -46,6 +49,15 @@ int main(int argc, char* argv[]) {
     QObject::connect(window, SIGNAL(closing(QQuickCloseEvent*)),  &Magnifier::instance(), SLOT(close(QQuickCloseEvent*)));
 
     ScreenshotTaker::SetWindow(window);
+
+
+    // read an image
+    cv::Mat image = cv::imread("C:/Users/User/Cumhur-Private-Projects/PixelCheck/aha.jpg", 1);
+    // create image window named "My Image"
+    cv::namedWindow("My Image");
+    // show the image on window
+    cv::imshow("My Image", image);
+
 
     return app.exec();
 }
