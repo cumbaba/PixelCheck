@@ -140,8 +140,8 @@ Window {
                     }
 
                     onTextChanged: {
-                        ImageComparison.ApplicationWidth = text;
-                        ImageComparison.updateIsComparable()
+                        ImageComparisonService.ApplicationWidth = text;
+                        ImageComparisonService.updateIsComparable()
                     }
                 }
             }
@@ -176,8 +176,8 @@ Window {
                     }
 
                     onTextChanged: {
-                        ImageComparison.ApplicationHeight = text;
-                        ImageComparison.updateIsComparable()
+                        ImageComparisonService.ApplicationHeight = text;
+                        ImageComparisonService.updateIsComparable()
                     }
                 }
             }
@@ -187,11 +187,11 @@ Window {
                     horizontalCenter: parent.horizontalCenter
                 }
 
-                enabled: ImageComparison.IsComparable
+                enabled: ImageComparisonService.IsComparable
                 text: "Compare"
 
                 onClicked: {
-                    ImageComparison.compare()
+                    ImageComparisonService.compare()
                 }
             }
 
@@ -212,7 +212,7 @@ Window {
                 text: "Magnifier"
 
                 Component.onCompleted: {
-                    checked = true
+//                    checked = true
                 }
             }
         }

@@ -1,7 +1,7 @@
 #include "ScreenshotCommander.h"
 
 #include "ScreenshotTaker.h"
-#include "ImageComparison.h"
+#include "ImageComparisonService.h"
 
 ScreenshotCommander::ScreenshotCommander(QObject* const parent) : QObject(parent),
     IsWaitingForInput(false),
@@ -23,13 +23,11 @@ void ScreenshotCommander::focusAreaReceived() {
 
     if (isExpectingBase) {
         baseImage = ScreenshotTaker::GetScreenshot();
-        ImageComparison::setBaseImage(baseImage);
-        baseImage.save("base.jpg");
+        ImageComparisonService::setBaseImage(baseImage);
     }
     else {
         sampleImage = ScreenshotTaker::GetScreenshot();
-        ImageComparison::setSampleImage(sampleImage);
-        sampleImage.save("sample.jpg");
+        ImageComparisonService::setSampleImage(sampleImage);
     }
 }
 

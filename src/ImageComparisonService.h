@@ -1,17 +1,17 @@
-#ifndef IMAGECOMPARISON_H
-#define IMAGECOMPARISON_H
+#ifndef IMAGECOMPARISONSERVICE_H
+#define IMAGECOMPARISONSERVICE_H
 
 #include <QObject>
 #include <QPixmap>
 #include <QString>
 
-#include "PropertyMacros.h"
+#include "utils/PropertyMacros.h"
 
-class ImageComparison : public QObject {
+class ImageComparisonService : public QObject {
         Q_OBJECT
 
     public:
-        static ImageComparison& instance();
+        static ImageComparisonService& instance();
 
         static void setBaseImage(const QPixmap& image);
         static void setSampleImage(const QPixmap& image);
@@ -31,11 +31,11 @@ class ImageComparison : public QObject {
         void updateIsComparable();
         void compare();
     private:
-        ImageComparison(QObject* const parent = nullptr);
-        virtual ~ImageComparison();
+        ImageComparisonService(QObject* const parent = nullptr);
+        virtual ~ImageComparisonService();
         QPixmap baseImage;
         QPixmap sampleImage;
 
 };
 
-#endif // IMAGECOMPARISON_H
+#endif // IMAGECOMPARISONSERVICE_H

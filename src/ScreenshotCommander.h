@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QPixmap>
 
-#include "PropertyMacros.h"
+#include "utils/PropertyMacros.h"
 
 class ScreenshotCommander : public QObject {
         Q_OBJECT

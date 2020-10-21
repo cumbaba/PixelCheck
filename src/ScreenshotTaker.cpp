@@ -5,7 +5,7 @@
 #include <QDesktopWidget>
 #include <QScreen>
 
-#include "MouseWatcher.h"
+#include "tools/MouseWatcher.h"
 
 ScreenshotTaker::ScreenshotTaker(QObject* const parent) : QObject(parent) {
     QObject::connect(&MouseWatcher::instance(), &MouseWatcher::signalClickFinished,

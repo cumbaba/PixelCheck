@@ -18,6 +18,8 @@ Magnifier::Magnifier(QObject* const parent) : QObject(parent) {
                      this, &Magnifier::onCursorImageReceived);
 }
 
+Magnifier::~Magnifier() {}
+
 void Magnifier::close(QQuickCloseEvent* close) {
     Q_UNUSED(close)
 
@@ -27,9 +29,6 @@ void Magnifier::close(QQuickCloseEvent* close) {
     window->close();
     delete window;
     QCoreApplication::quit();
-}
-
-Magnifier::~Magnifier() {
 }
 
 Magnifier& Magnifier::instance() {

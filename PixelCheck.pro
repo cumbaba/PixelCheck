@@ -4,19 +4,23 @@ QT += qml quick widgets
 CONFIG += c++11
 
 SOURCES += src/main.cpp \
-    src/MouseWatcher.cpp \
+    src/ImageComparisonService.cpp \
     src/ScreenshotCommander.cpp \
     src/ScreenshotTaker.cpp \
-    src/Magnifier.cpp \
-    src/ImageComparison.cpp
+    src/tools/Magnifier.cpp \
+    src/tools/MouseWatcher.cpp \
+    src/utils/ImageUtils.cpp \
+    src/utils/Converter.cpp
 
 HEADERS += \
-    src/MouseWatcher.h \
-    src/PropertyMacros.h \
+    src/ImageComparisonService.h \
     src/ScreenshotCommander.h \
     src/ScreenshotTaker.h \
-    src/Magnifier.h \
-    src/ImageComparison.h
+    src/tools/Magnifier.h \
+    src/tools/MouseWatcher.h \
+    src/utils/ImageUtils.h \
+    src/utils/Converter.h
+    src/utils/PropertyMacros.h \
 
 RESOURCES += src/qml.qrc \
             resources/

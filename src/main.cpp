@@ -5,13 +5,11 @@
 #include <QIcon>
 #include <QQmlEngine>
 
+#include "ImageComparisonService.h"
 #include "ScreenshotCommander.h"
 #include "ScreenshotTaker.h"
-#include "Magnifier.h"
-#include "ImageComparison.h"
 
-#include <opencv2/core/core.hpp>
-#include <opencv2//highgui/highgui.hpp>
+#include "tools/Magnifier.h"
 
 void customMessageOutput(QtMsgType type, const QMessageLogContext& context, const QString& msg) {
     Q_UNUSED(context)
@@ -34,7 +32,7 @@ int main(int argc, char* argv[]) {
 
     auto ssTaker = new ScreenshotCommander();
     engine.rootContext()->setContextProperty("ScreenshotCommander", ssTaker);
-    engine.rootContext()->setContextProperty("ImageComparison", &ImageComparison::instance());
+    engine.rootContext()->setContextProperty("ImageComparisonService", &ImageComparisonService::instance());
     engine.rootContext()->setContextProperty("Magnifier", &Magnifier::instance());
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
@@ -49,15 +47,6 @@ int main(int argc, char* argv[]) {
     QObject::connect(window, SIGNAL(closing(QQuickCloseEvent*)),  &Magnifier::instance(), SLOT(close(QQuickCloseEvent*)));
 
     ScreenshotTaker::SetWindow(window);
-
-
-    // read an image
-    cv::Mat image = cv::imread("C:/Users/User/Cumhur-Private-Projects/PixelCheck/aha.jpg", 1);
-    // create image window named "My Image"
-    cv::namedWindow("My Image");
-    // show the image on window
-    cv::imshow("My Image", image);
-
 
     return app.exec();
 }
