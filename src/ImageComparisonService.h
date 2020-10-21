@@ -35,7 +35,7 @@ class ImageComparisonService : public QObject {
         virtual ~ImageComparisonService();
         QPixmap baseImage;
         QPixmap sampleImage;
-
+        QPixmap resultImage;
 };
 
 #endif // IMAGECOMPARISONSERVICE_H

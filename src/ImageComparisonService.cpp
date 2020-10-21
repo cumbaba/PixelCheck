@@ -1,11 +1,7 @@
 #include "ImageComparisonService.h"
 
 #include "ScreenshotTaker.h"
-
-#include <opencv2/core/core.hpp>
-#include <opencv2//highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/imgproc/types_c.h>
+#include "utils/ImageUtils.h"
 
 ImageComparisonService::ImageComparisonService(QObject* const parent) : QObject(parent) {
 }
@@ -40,11 +36,5 @@ void ImageComparisonService::updateIsComparable() {
 }
 
 void ImageComparisonService::compare() {
-    // read an image
-    cv::Mat image = cv::imread("C:/Users/User/Cumhur-Private-Projects/PixelCheck/aha.jpg", 1);
-    // create image window named "My Image"
-    cv::namedWindow("My Image");
-    // show the image on window
-    cv::imshow("My Image", image);
-
+    resultImage = ImageUtils::compare(baseImage, sampleImage);
 }
