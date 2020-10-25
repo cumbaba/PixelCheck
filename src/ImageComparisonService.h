@@ -29,6 +29,10 @@ class ImageComparisonService : public QObject {
 
     public slots:
         void updateIsComparable();
+
+        /**
+         * @brief Execute this when IsComparable is true.
+         */
         void compare();
     private:
         ImageComparisonService(QObject* const parent = nullptr);
@@ -36,6 +40,7 @@ class ImageComparisonService : public QObject {
         QPixmap baseImage;
         QPixmap sampleImage;
         QPixmap resultImage;
+        QSize contentSize;
 };
 
 #endif // IMAGECOMPARISONSERVICE_H

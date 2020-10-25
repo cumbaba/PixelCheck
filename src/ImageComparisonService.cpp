@@ -4,9 +4,13 @@
 #include "utils/ImageUtils.h"
 
 ImageComparisonService::ImageComparisonService(QObject* const parent) : QObject(parent) {
+    connect(this, &ImageComparisonService::signalApplicationHeightChanged, this, [this] {this->updateIsComparable();});
+    connect(this, &ImageComparisonService::signalApplicationWidthChanged, this, [this] {this->updateIsComparable();});
 }
 
-ImageComparisonService::~ImageComparisonService() {}
+ImageComparisonService::~ImageComparisonService() {
+    this->disconnect();
+}
 
 ImageComparisonService& ImageComparisonService::instance() {
     static ImageComparisonService _instance;
@@ -31,10 +35,14 @@ void ImageComparisonService::updateIsComparable() {
     int minWidth = this->ApplicationWidth.toInt(&ok2);
 
     setIsComparable(ok1 && ok2 && minHeight > 0 && minWidth > 0
-                    && minHeight < baseImage.height() && minHeight < sampleImage.height()
-                    && minWidth < baseImage.width() && minWidth < sampleImage.width());
+                    /*&& minHeight < baseImage.height() && minHeight < sampleImage.height()
+                    && minWidth < baseImage.width() && minWidth < sampleImage.width()*/);
+
+    if (IsComparable) {
+        contentSize = QSize(minWidth, minHeight);
+    }
 }
 
 void ImageComparisonService::compare() {
-    resultImage = ImageUtils::compare(baseImage, sampleImage);
+    resultImage = ImageUtils::compare(baseImage, sampleImage, contentSize);
 }

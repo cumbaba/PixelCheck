@@ -11,8 +11,14 @@
 class ImageUtils {
 
     public:
-        static QPixmap compare(const QPixmap& base, const QPixmap& sample);
+        static QPixmap compare(const QPixmap& base, const QPixmap& sample, const QSize& contentSize);
 
+
+    private:
+        static cv::Point findContentPosition(const cv::Mat& image, const cv::Size& size);
+        static cv::Mat applyCannyEdge(const cv::Mat& image);
+
+        static bool tryRectengale(const cv::Mat& image, const cv::Point& startPoint, const cv::Size& size);
 };
 
 #endif // IMAGEUTILS_H

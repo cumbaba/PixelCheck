@@ -131,7 +131,7 @@ Window {
                     width: 100
                     font.pixelSize: 15
 
-                    anchors.verticalCenter: heightLabel.verticalCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     style: TextFieldStyle {
                         textColor: "black"
                         background: Rectangle {
@@ -139,9 +139,9 @@ Window {
                         }
                     }
 
+                    text: "500"
                     onTextChanged: {
                         ImageComparisonService.ApplicationWidth = text;
-                        ImageComparisonService.updateIsComparable()
                     }
                 }
             }
@@ -175,9 +175,9 @@ Window {
                         }
                     }
 
+                    text: "700"
                     onTextChanged: {
                         ImageComparisonService.ApplicationHeight = text;
-                        ImageComparisonService.updateIsComparable()
                     }
                 }
             }
@@ -187,7 +187,7 @@ Window {
                     horizontalCenter: parent.horizontalCenter
                 }
 
-                enabled: ImageComparisonService.IsComparable
+//                enabled: ImageComparisonService.IsComparable
                 text: "Compare"
 
                 onClicked: {
