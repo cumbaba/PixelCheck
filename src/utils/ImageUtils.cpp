@@ -8,17 +8,35 @@
 #include <iostream>
 
 QPixmap ImageUtils::compare(const QPixmap& base, const QPixmap& sample, const QSize& contentSize) {
-    auto baseMat = Converter::QPixmapToCvMat(QPixmap("base.png"));
+    //    auto baseMat = Converter::QPixmapToCvMat(QPixmap("base.png"));
     auto sampleMat = Converter::QPixmapToCvMat(QPixmap("sample.png"));
 
-    auto baseRect = findContentPosition(baseMat, cv::Size(contentSize.width(), contentSize.height()));
-    auto sampleRect = findContentPosition(sampleMat, cv::Size(contentSize.width(), contentSize.height()));
+    auto lines = detectLines(sampleMat);
 
-    auto croppedBase = baseMat(cv::Rect(baseRect.x, baseRect.y, contentSize.width(), contentSize.height()));
-    auto croppedSample = sampleMat(cv::Rect(sampleRect.x, sampleRect.y, contentSize.width(), contentSize.height()));
+    const int magic = 1000000;
 
-    cv::imshow("croppedBase", croppedBase);
-    cv::imshow("croppedSample", croppedSample);
+    // Draw the lines
+    for (size_t i = 0; i < lines.first.size(); i++) {
+        std::cout << "x: " <<  lines.first.at(i) << std::endl;
+    }
+
+    // Draw the lines
+    for (size_t i = 0; i < lines.second.size(); i++) {
+        std::cout << "y: " <<  lines.second.at(i) << std::endl;
+    }
+
+
+
+
+    cv::imshow("lines", sampleMat);
+    //    auto baseRect = findContentPosition(baseMat, cv::Size(contentSize.width(), contentSize.height()));
+    //    auto sampleRect = findContentPosition(sampleMat, cv::Size(contentSize.width(), contentSize.height()));
+
+    //    auto croppedBase = baseMat(cv::Rect(baseRect.x, baseRect.y, contentSize.width(), contentSize.height()));
+    //    auto croppedSample = sampleMat(cv::Rect(sampleRect.x, sampleRect.y, contentSize.width(), contentSize.height()));
+
+    //    cv::imshow("croppedBase", croppedBase);
+    //    cv::imshow("croppedSample", croppedSample);
 
 }
 
@@ -292,6 +310,58 @@ bool ImageUtils::tryRectengale(const cv::Mat& image, const cv::Point& startPoint
     }
 
     return true;
+}
+
+std::pair<QList<int>, QList<int>> ImageUtils::detectLines(const cv::Mat& image) {
+    // Declare the output variables
+    cv::Mat image_gry, edgeImage, orginalImageWithHoughLines;
+
+    // Loads an image
+    cv::cvtColor(image, image_gry, cv::COLOR_BGR2GRAY);
+
+    // Apply the Guassian Blur filter to smooth the image
+    cv::Mat image_gaussian_processed;
+    cv::GaussianBlur(image_gry, image_gaussian_processed, cv::Size(5, 5), 1);
+
+    // Edge detection
+    cv::Canny(image_gaussian_processed, edgeImage, 50, 120, 3);
+
+    // Copy loaded image to the initial image so that will display the results in BGR
+    cv::cvtColor(image_gry, orginalImageWithHoughLines, cv::COLOR_GRAY2BGR);
+
+    // Declaring some constants for the parameters
+    const int dis_reso = 1;
+    const double theta = CV_PI / 180;
+    const int threshold = 170;
+
+    // Standard Hough Line Transform
+    std::vector<cv::Vec2f> lines; // will hold the results of the detection
+    cv::HoughLines(edgeImage, lines, dis_reso, theta, threshold, 0, 0); // runs the actual detection
+
+    QList<int> xAxis, yAxis;
+    const int magic = 48000000;
+
+    // Draw the lines
+    for (size_t i = 0; i < lines.size(); i++) {
+        float rho = lines[i][0], theta = lines[i][1];
+        cv::Point pt1, pt2;
+        double a = cos(theta), b = sin(theta);
+        double x0 = a * rho, y0 = b * rho;
+        pt1.x = cvRound(x0 + magic * (-b));
+        pt1.y = cvRound(y0 + magic * (a));
+        pt2.x = cvRound(x0 - magic * (-b));
+        pt2.y = cvRound(y0 - magic * (a));
+        cv::line(image, pt1, pt2, cv::Scalar(0, 255, 00), 1, cv::LINE_AA);
+
+        if (abs(pt1.x) == magic) {
+            yAxis.push_back(pt1.y);
+        }
+        else {
+            xAxis.push_back(pt1.x);
+        }
+    }
+
+    return std::make_pair(xAxis, yAxis);
 }
 
 cv::Mat ImageUtils::applyCannyEdge(const cv::Mat& image) {

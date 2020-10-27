@@ -19,6 +19,8 @@ class ImageUtils {
         static cv::Mat applyCannyEdge(const cv::Mat& image);
 
         static bool tryRectengale(const cv::Mat& image, const cv::Point& startPoint, const cv::Size& size);
+
+        static std::pair<QList<int>, QList<int>> detectLines(const cv::Mat& s);
 };
 
 #endif // IMAGEUTILS_H
