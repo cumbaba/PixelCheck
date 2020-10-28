@@ -9,7 +9,7 @@
 
 QPixmap ImageUtils::compare(const QPixmap& base, const QPixmap& sample, const QSize& contentSize) {
     //    auto baseMat = Converter::QPixmapToCvMat(QPixmap("base.png"));
-    auto sampleMat = Converter::QPixmapToCvMat(QPixmap("sample.png"));
+    auto sampleMat = Converter::QPixmapToCvMat(QPixmap("s1.png"));
 
     //    auto lines = detectLines(sampleMat);
 
@@ -26,14 +26,14 @@ QPixmap ImageUtils::compare(const QPixmap& base, const QPixmap& sample, const QS
 
     //    cv::imshow("lines", sampleMat);
     //    auto baseRect = findContentPosition(baseMat, cv::Size(contentSize.width(), contentSize.height()));
-    auto sampleRect = findContentPosition(sampleMat, cv::Size(contentSize.width(), contentSize.height()));
+    auto sampleRect = findContentPosition(sampleMat, cv::Size(800, 480));
 
     std::cout <<  sampleRect.x << "::" << sampleRect.y << std::endl;
     //    auto croppedBase = baseMat(cv::Rect(baseRect.x, baseRect.y, contentSize.width(), contentSize.height()));
-    auto croppedSample = sampleMat(cv::Rect(sampleRect.x, sampleRect.y, contentSize.width(), contentSize.height()));
+    //    auto croppedSample = sampleMat(cv::Rect(sampleRect.x, sampleRect.y, contentSize.width(), contentSize.height()));
 
     //        cv::imshow("croppedBase", croppedBase);
-//    cv::imshow("croppedSample", croppedSample);
+    //    cv::imshow("croppedSample", croppedSample);
 
 }
 
@@ -55,31 +55,45 @@ cv::Point ImageUtils::findContentPosition(const cv::Mat& image, const cv::Size& 
 
     auto x = 0, y = 0;
 
-    //    for (auto i = 0; i < xAxisLines.size(); i++) {
-    //        if (xAxisLines.size() > i + 1) {
-    //            for (auto j = i + 1; j < xAxisLines.size(); j++) {
-    //                if (xAxisLines.at(j) - xAxisLines.at(i) + 1 == size.width) {
-    //                    x = xAxisLines.at(i);
-    //                    break;
-    //                }
-    //            }
-    //        }
-    //    }
+    const int pixelTolerance = 1;
 
-    //    for (auto i = 0; i < yAxisLines.size(); i++) {
-    //        if (yAxisLines.size() > i + 1) {
-    //            for (auto j = i + 1; j < yAxisLines.size(); j++) {
-    //                if (yAxisLines.at(j) - yAxisLines.at(i) + 1 == size.height) {
-    //                    y = yAxisLines.at(i);
-    //                    break;
-    //                }
-    //            }
-    //        }
-    //    }
+    for (auto i = 0; i < xAxisLines.size(); i++) {
+        if (xAxisLines.size() > i + 1) {
+            for (auto j = i + 1; j < xAxisLines.size(); j++) {
+                if (abs(abs(xAxisLines.at(j) - xAxisLines.at(i)) - size.width) <=  pixelTolerance) {
+                    if (xAxisLines.at(i) > xAxisLines.at(j)) {
+                        x = xAxisLines.at(j);
+                    }
+                    else {
+                        x = xAxisLines.at(i);
+                    }
 
-    //    if (x == 0 || y == 0) {
-    //        throw std::invalid_argument("content not found");
-    //    }
+                    break;
+                }
+            }
+        }
+    }
+
+    for (auto i = 0; i < yAxisLines.size(); i++) {
+        if (yAxisLines.size() > i + 1) {
+            for (auto j = i + 1; j < yAxisLines.size(); j++) {
+                if (abs(abs(yAxisLines.at(j) - yAxisLines.at(i)) - size.height) <=  pixelTolerance) {
+                    if (yAxisLines.at(i) > yAxisLines.at(j)) {
+                        y = yAxisLines.at(j);
+                    }
+                    else {
+                        y = yAxisLines.at(i);
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+
+    if (x == 0 || y == 0) {
+        //        throw std::invalid_argument("content not found");
+    }
 
     return cv::Point(x, y);
 }
@@ -111,7 +125,7 @@ std::pair<QList<int>, QList<int>> ImageUtils::detectLines(const cv::Mat& image) 
     cv::HoughLines(edgeImage, lines, dis_reso, theta, threshold, 0, 0); // runs the actual detection
 
     QList<int> xAxis, yAxis;
-    const int magic = 48000000;
+    const int magic = 10000;
 
     // Draw the lines
     for (size_t i = 0; i < lines.size(); i++) {
@@ -125,11 +139,15 @@ std::pair<QList<int>, QList<int>> ImageUtils::detectLines(const cv::Mat& image) 
         pt2.y = cvRound(y0 - magic * (a));
         cv::line(image, pt1, pt2, cv::Scalar(0, 255, 00), 1, cv::LINE_AA);
 
-        if (abs(pt1.x) == magic) {
-            yAxis.push_back(pt1.y);
+        if (abs(pt1.x) == magic || abs(pt2.x) == magic) {
+            if (pt1.y > 0) {
+                yAxis.push_back(pt1.y);
+            }
         }
         else {
-            xAxis.push_back(pt1.x);
+            if (pt1.x > 0) {
+                xAxis.push_back(pt1.x);
+            }
         }
     }
 
