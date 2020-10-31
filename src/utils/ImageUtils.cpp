@@ -7,27 +7,32 @@
 
 #include <iostream>
 
+#include "WinUtils.h"
+
 QPixmap ImageUtils::compare(const QPixmap& base, const QPixmap& sample, const QSize& contentSize) {
-    auto baseMat = Converter::QPixmapToCvMat(QPixmap("sample.png"));
-    auto sampleMat = Converter::QPixmapToCvMat(QPixmap("s1.png"));
 
-    cv::Point baseRect, sampleRect;
 
-    try {
-        baseRect = findContentPosition(baseMat, cv::Size(500, 700));
-        std::cout <<  "base:\t" << baseRect.x << "::" << baseRect.y << std::endl;
-    }
-    catch (std::invalid_argument& e) {
-        std::cout << e.what() << "x: " << baseRect.x << " y: " << baseRect.y << std::endl;
-    }
+    WinUtils::getAllWindows();
+//    auto baseMat = Converter::QPixmapToCvMat(QPixmap("sample.png"));
+//    auto sampleMat = Converter::QPixmapToCvMat(QPixmap("s1.png"));
 
-    try {
-        sampleRect = findContentPosition(sampleMat, cv::Size(800, 480));
-        std::cout <<  "sample:\t" << sampleRect.x << "::" << sampleRect.y << std::endl;
-    }
-    catch (std::invalid_argument& e) {
-        std::cout << e.what() << "x: " << sampleRect.x << " y: " << sampleRect.y << std::endl;
-    }
+//    cv::Point baseRect, sampleRect;
+
+//    try {
+//        baseRect = findContentPosition(baseMat, cv::Size(500, 700));
+//        std::cout <<  "base:\t" << baseRect.x << "::" << baseRect.y << std::endl;
+//    }
+//    catch (std::invalid_argument& e) {
+//        std::cout << e.what() << "x: " << baseRect.x << " y: " << baseRect.y << std::endl;
+//    }
+
+//    try {
+//        sampleRect = findContentPosition(sampleMat, cv::Size(800, 480));
+//        std::cout <<  "sample:\t" << sampleRect.x << "::" << sampleRect.y << std::endl;
+//    }
+//    catch (std::invalid_argument& e) {
+//        std::cout << e.what() << "x: " << sampleRect.x << " y: " << sampleRect.y << std::endl;
+//    }
 
 
 

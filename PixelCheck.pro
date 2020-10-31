@@ -10,7 +10,8 @@ SOURCES += src/main.cpp \
     src/tools/Magnifier.cpp \
     src/tools/MouseWatcher.cpp \
     src/utils/ImageUtils.cpp \
-    src/utils/Converter.cpp
+    src/utils/Converter.cpp \
+    src/utils/WinUtils.cpp
 
 HEADERS += \
     src/ImageComparisonService.h \
@@ -19,7 +20,8 @@ HEADERS += \
     src/tools/Magnifier.h \
     src/tools/MouseWatcher.h \
     src/utils/ImageUtils.h \
-    src/utils/Converter.h
+    src/utils/Converter.h \
+    src/utils/WinUtils.h
     src/utils/PropertyMacros.h \
 
 RESOURCES += src/qml.qrc \
@@ -39,3 +41,5 @@ LIBS += $$PWD/lib/opencv/bin/libopencv_imgcodecs440.dll
 LIBS += $$PWD/lib/opencv/bin/libopencv_imgproc440.dll
 LIBS += $$PWD/lib/opencv/bin/libopencv_features2d440.dll
 LIBS += $$PWD/lib/opencv/bin/libopencv_calib3d440.dll
+
+LIBS += -lKernel32
