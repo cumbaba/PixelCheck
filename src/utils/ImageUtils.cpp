@@ -8,27 +8,29 @@
 #include <iostream>
 
 QPixmap ImageUtils::compare(const QPixmap& base, const QPixmap& sample, const QSize& contentSize) {
-    //    auto baseMat = Converter::QPixmapToCvMat(QPixmap("base.png"));
+    auto baseMat = Converter::QPixmapToCvMat(QPixmap("sample.png"));
     auto sampleMat = Converter::QPixmapToCvMat(QPixmap("s1.png"));
 
-    //    auto lines = detectLines(sampleMat);
+    cv::Point baseRect, sampleRect;
 
-    //    // Draw the lines
-    //    for (size_t i = 0; i < lines.first.size(); i++) {
-    //        std::cout << "x: " <<  lines.first.at(i) << std::endl;
-    //    }
+    try {
+        baseRect = findContentPosition(baseMat, cv::Size(500, 700));
+        std::cout <<  "base:\t" << baseRect.x << "::" << baseRect.y << std::endl;
+    }
+    catch (std::invalid_argument& e) {
+        std::cout << e.what() << "x: " << baseRect.x << " y: " << baseRect.y << std::endl;
+    }
 
-    //    // Draw the lines
-    //    for (size_t i = 0; i < lines.second.size(); i++) {
-    //        std::cout << "y: " <<  lines.second.at(i) << std::endl;
-    //    }
+    try {
+        sampleRect = findContentPosition(sampleMat, cv::Size(800, 480));
+        std::cout <<  "sample:\t" << sampleRect.x << "::" << sampleRect.y << std::endl;
+    }
+    catch (std::invalid_argument& e) {
+        std::cout << e.what() << "x: " << sampleRect.x << " y: " << sampleRect.y << std::endl;
+    }
 
 
-    //    cv::imshow("lines", sampleMat);
-    //    auto baseRect = findContentPosition(baseMat, cv::Size(contentSize.width(), contentSize.height()));
-    auto sampleRect = findContentPosition(sampleMat, cv::Size(800, 480));
 
-    std::cout <<  sampleRect.x << "::" << sampleRect.y << std::endl;
     //    auto croppedBase = baseMat(cv::Rect(baseRect.x, baseRect.y, contentSize.width(), contentSize.height()));
     //    auto croppedSample = sampleMat(cv::Rect(sampleRect.x, sampleRect.y, contentSize.width(), contentSize.height()));
 
@@ -41,14 +43,14 @@ cv::Point ImageUtils::findContentPosition(const cv::Mat& image, const cv::Size& 
     auto lines = detectLines(image);
 
     // Draw the lines
-    for (size_t i = 0; i < lines.first.size(); i++) {
-        std::cout << "x: " <<  lines.first.at(i) << std::endl;
-    }
+//    for (size_t i = 0; i < lines.first.size(); i++) {
+//        std::cout << "x: " <<  lines.first.at(i) << std::endl;
+//    }
 
-    // Draw the lines
-    for (size_t i = 0; i < lines.second.size(); i++) {
-        std::cout << "y: " <<  lines.second.at(i) << std::endl;
-    }
+//    // Draw the lines
+//    for (size_t i = 0; i < lines.second.size(); i++) {
+//        std::cout << "y: " <<  lines.second.at(i) << std::endl;
+//    }
 
     auto xAxisLines = lines.first;
     auto yAxisLines = lines.second;
@@ -92,7 +94,7 @@ cv::Point ImageUtils::findContentPosition(const cv::Mat& image, const cv::Size& 
     }
 
     if (x == 0 || y == 0) {
-        //        throw std::invalid_argument("content not found");
+        throw std::invalid_argument("content not found");
     }
 
     return cv::Point(x, y);
@@ -103,7 +105,8 @@ std::pair<QList<int>, QList<int>> ImageUtils::detectLines(const cv::Mat& image) 
     cv::Mat image_gry, edgeImage, orginalImageWithHoughLines;
 
     // Loads an image
-    cv::cvtColor(image, image_gry, cv::COLOR_BGR2GRAY);
+    //    cv::cvtColor(image, image_gry, cv::COLOR_BGR2GRAY);
+    image_gry = applyCannyEdge(image);
 
     // Apply the Guassian Blur filter to smooth the image
     cv::Mat image_gaussian_processed;
@@ -151,7 +154,7 @@ std::pair<QList<int>, QList<int>> ImageUtils::detectLines(const cv::Mat& image) 
         }
     }
 
-    cv::imshow("lines", image);
+    cv::imshow(std::to_string(image.cols), image);
 
     return std::make_pair(xAxis, yAxis);
 }
