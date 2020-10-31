@@ -7,7 +7,7 @@
 class WinUtils {
     public:
         static std::vector<cv::Rect> getAllWindows();
-        static BOOL CALLBACK saveWindow(HWND hwnd, LPARAM lParam);
+        static BOOL CALLBACK iterateWindows(HWND hwnd, LPARAM lParam);
 };
 
 #endif // WINUTILS_H
