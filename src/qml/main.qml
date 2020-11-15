@@ -139,7 +139,7 @@ Window {
                         }
                     }
 
-                    text: "500"
+                    text: "800"
                     onTextChanged: {
                         ImageComparisonService.ApplicationWidth = text;
                     }
@@ -175,7 +175,7 @@ Window {
                         }
                     }
 
-                    text: "700"
+                    text: "480"
                     onTextChanged: {
                         ImageComparisonService.ApplicationHeight = text;
                     }

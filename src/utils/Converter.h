@@ -26,6 +26,8 @@ class Converter {
         //    NOTE: Format_RGB888 is an exception since we need to use a local QImage and thus must clone the data regardless
         static cv::Mat QImageToCvMat(const QImage& inImage, bool inCloneImageData = true);
 
+        static cv::Size toCvSize(const QSize& size);
+
 };
 
 #endif // CONVERTER_H

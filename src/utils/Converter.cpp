@@ -134,3 +134,7 @@ cv::Mat Converter::QImageToCvMat(const QImage& inImage, bool inCloneImageData) {
 cv::Mat Converter::QPixmapToCvMat(const QPixmap& inPixmap, bool inCloneImageData) {
     return QImageToCvMat(inPixmap.toImage(), inCloneImageData);
 }
+
+cv::Size Converter::toCvSize(const QSize& size) {
+    return cv::Size(size.width(),size.height());
+}
