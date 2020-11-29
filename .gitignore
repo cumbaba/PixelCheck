@@ -34,8 +34,7 @@
 *.app
 
 # build dirs
-debug/*
-release/*
+build/*
 
 
 # temp makefile

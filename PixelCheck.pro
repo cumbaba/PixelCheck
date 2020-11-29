@@ -11,7 +11,8 @@ SOURCES += src/main.cpp \
     src/tools/MouseWatcher.cpp \
     src/utils/ImageUtils.cpp \
     src/utils/Converter.cpp \
-    src/utils/WinUtils.cpp
+    src/utils/WinUtils.cpp \
+    src/utils/TextDetector.cpp
 
 HEADERS += \
     src/ImageComparisonService.h \
@@ -21,7 +22,8 @@ HEADERS += \
     src/tools/MouseWatcher.h \
     src/utils/ImageUtils.h \
     src/utils/Converter.h \
-    src/utils/WinUtils.h
+    src/utils/WinUtils.h \
+    src/utils/TextDetector.h
     src/utils/PropertyMacros.h \
 
 RESOURCES += src/qml.qrc \
@@ -33,13 +35,24 @@ QML_IMPORT_PATH =
 # Default rules for deployment.
 include(deployment.pri)
 
-INCLUDEPATH += $$PWD/lib/opencv/include
 
-LIBS += $$PWD/lib/opencv/bin/libopencv_core440.dll
-LIBS += $$PWD/lib/opencv/bin/libopencv_highgui440.dll
-LIBS += $$PWD/lib/opencv/bin/libopencv_imgcodecs440.dll
-LIBS += $$PWD/lib/opencv/bin/libopencv_imgproc440.dll
-LIBS += $$PWD/lib/opencv/bin/libopencv_features2d440.dll
-LIBS += $$PWD/lib/opencv/bin/libopencv_calib3d440.dll
+# opencv
+INCLUDEPATH += $$PWD/lib/opencv/include
+DEPENDPATH += $$PWD/lib/opencv/include
+
+LIBS += -L$$PWD/lib/opencv/bin/ -lopencv_core440 \
+                                -lopencv_highgui440 \
+                                -lopencv_imgcodecs440 \
+                                -lopencv_imgproc440 \
+                                -lopencv_features2d440 \
+                                -lopencv_calib3d440
 
 LIBS += -lKernel32
+
+# tesseract
+INCLUDEPATH += $$PWD/lib/tesseract/include
+DEPENDPATH += $$PWD/lib/tesseract/include
+
+LIBS += -L$$PWD/lib/tesseract/bin/ -lQt5.4tesseract3.02.02
+
+
