@@ -5,6 +5,7 @@
 
 #include <QMainWindow>
 #include <QQuickWindow>
+
 class Magnifier : public QObject {
         Q_OBJECT
     public:
@@ -14,6 +15,7 @@ class Magnifier : public QObject {
         void close(QQuickCloseEvent *close);
         void turnOn();
         void turnOff();
+        QUrl getMouseimage();
 
     private:
         Magnifier(QObject* const parent = nullptr);
@@ -22,8 +24,8 @@ class Magnifier : public QObject {
         void onCursorImageReceived(const QPixmap& image);
         void coverCenterPixel(QPixmap* image);
 
+        QPixmap last_image;
         bool isOn;
-        QPixmap getMagnifiedImage();
         QMainWindow* window;
 };
 

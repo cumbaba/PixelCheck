@@ -12,8 +12,6 @@ class MouseWatcher : public QObject {
     public:
         static MouseWatcher& instance();
 
-        static int GetScreenNumber();
-
         static void StartCursorImageWatch();
         static void StopCursorImageWatch();
         static void CaptureMouseClick();

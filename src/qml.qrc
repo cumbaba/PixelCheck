@@ -1,7 +1,7 @@
 <RCC>
-    <qresource prefix="/">
-        <file>qml/main.qml</file>
-        <file>qml/MainMenuButton.qml</file>
-        <file>qml/ScreenshotScreen.qml</file>
+    <qresource prefix="/qml/">
+        <file>main.qml</file>
+        <file>MainMenuButton.qml</file>
+        <file>ScreenshotScreen.qml</file>
     </qresource>
 </RCC>

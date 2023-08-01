@@ -2,13 +2,13 @@
 
 #include <QApplication>
 #include <QScreen>
-#include <QDesktopWidget>
 #include <QPainter>
+#include <QBuffer>
 
 #include "MouseWatcher.h"
 
 Magnifier::Magnifier(QObject* const parent) : QObject(parent) {
-    window = new QMainWindow(QApplication::desktop());
+    window = new QMainWindow();
 
     window->setGeometry(100, 100, 200, 200);
     window->setWindowState(Qt::WindowState::WindowActive);
@@ -16,6 +16,8 @@ Magnifier::Magnifier(QObject* const parent) : QObject(parent) {
 
     QObject::connect(&MouseWatcher::instance(), &MouseWatcher::signalCursorImageUpdate,
                      this, &Magnifier::onCursorImageReceived);
+
+    window->show();
 }
 
 Magnifier::~Magnifier() {}
@@ -54,14 +56,32 @@ void Magnifier::turnOff() {
     }
 }
 
+QUrl Magnifier::getMouseimage() {
+    const auto imageToUrl = [] (const QImage& image)->QUrl
+    {
+        QByteArray byteArray;
+        QBuffer buffer(&byteArray);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, "png");
+        QString base64 = QString::fromUtf8(byteArray.toBase64());
+        return QString("data:image/png;base64,") + base64;
+    };
+
+
+    return imageToUrl(last_image.toImage());
+}
+
 void Magnifier::onCursorImageReceived(const QPixmap& image) {
     auto scaledImage = image.scaled(window->size(), Qt::IgnoreAspectRatio);
     coverCenterPixel(&scaledImage);
-
+/*
     QPalette palette;
-    palette.setBrush(QPalette::Background, scaledImage);
+    palette.setBrush( QPalette::ColorRole::Window, scaledImage);*/
 
-    window->setPalette(palette);
+    last_image = scaledImage;
+
+  // window->setPalette(palette);
+
 }
 
 void Magnifier::coverCenterPixel(QPixmap* image) {
@@ -70,3 +90,4 @@ void Magnifier::coverCenterPixel(QPixmap* image) {
     paint->drawRect(99, 99, 6, 6);
     delete paint;
 }
+;

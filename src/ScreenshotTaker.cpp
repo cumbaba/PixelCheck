@@ -2,7 +2,6 @@
 
 #include <QApplication>
 #include <QGuiApplication>
-#include <QDesktopWidget>
 #include <QScreen>
 
 #include "tools/MouseWatcher.h"

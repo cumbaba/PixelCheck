@@ -1,10 +1,16 @@
 #include "MouseWatcher.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QScreen>
 
 #include <iostream>
+
+/*QPoint cursorPos = QCursor::pos();
+QScreen *screen = QGuiApplication::screenAt(cursorPos);
+if (screen) {
+    QRect rect(cursorPos.x() - 50, cursorPos.y() - 50, 100, 100);
+    QPixmap pixmap = screen->grabWindow(0, rect.x(), rect.y(), rect.width(), rect.height());
+}*/
 
 MouseWatcher::MouseWatcher(QObject* const parent): QObject(parent),
     cursorImageWidth(40),
@@ -65,13 +71,15 @@ bool MouseWatcher::eventFilter(QObject* const object, QEvent* const event) {
 
 void MouseWatcher::updateCursorImage() {
     auto pos = GetMousePosition();
+    QScreen *screen = QGuiApplication::screenAt(pos);
 
-    emit signalCursorImageUpdate(QApplication::primaryScreen()->grabWindow(
-                                     QApplication::desktop()->winId(),
-                                     pos.x() - cursorImageWidth / 2,
-                                     pos.y() - cursorImageHeight / 2,
-                                     cursorImageWidth,
-                                     cursorImageHeight));
+    if (screen) {
+        emit signalCursorImageUpdate(screen->grabWindow(0,
+                                                        pos.x() - cursorImageWidth / 2,
+                                                        pos.y() - cursorImageHeight / 2,
+                                                        cursorImageWidth,
+                                                        cursorImageHeight));
+    }
 }
 
 QPixmap MouseWatcher::doGetClickedArea() {
@@ -80,17 +88,21 @@ QPixmap MouseWatcher::doGetClickedArea() {
     std::cout << "[p1] x: " << area.x() << " y: " << area.y() <<
               " [p2] w: " << area.width() << " w: " << area.height() << std::endl;
 
-    return QApplication::primaryScreen()->grabWindow(
-               QApplication::desktop()->winId(),
-               area.x(),
-               area.y(),
-               area.width(),
-               area.height());
 
+    auto pos = GetMousePosition();
+    QScreen *screen = QGuiApplication::screenAt(pos);
+
+    if (screen) {
+        return screen->grabWindow(0,
+                                area.x(),
+                                area.y(),
+                                area.width(),
+                                area.height());
+    }
 }
 
 QPoint MouseWatcher::GetMousePosition() {
-    QRect mouseScreenGeometry = QApplication::desktop()->screen(GetScreenNumber())->geometry();
+    QRect mouseScreenGeometry = QGuiApplication::screenAt(QCursor::pos())->geometry();
     return QCursor::pos() - mouseScreenGeometry.topLeft();
 }
 
@@ -112,8 +124,4 @@ void MouseWatcher::SetCursorImageWidth(const unsigned int aCursorImageWidth) {
 
 QPixmap MouseWatcher::GetClickedArea() {
     return instance().doGetClickedArea();
-}
-
-int MouseWatcher::GetScreenNumber() {
-    return QApplication::desktop()->screenNumber(QCursor::pos());
 }
